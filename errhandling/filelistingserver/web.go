@@ -32,7 +32,7 @@ func errWrapper(handler appHandler) func(http.ResponseWriter, *http.Request) {
 			log.Printf("Error occurred handling request: %s", err.Error())
 
 			if err, ok := err.(userError); ok {
-				http.Error(writer, err.Message(), http.StatusInternalServerError)
+				http.Error(writer, err.Message(), http.StatusBadRequest)
 				return
 			}
 
