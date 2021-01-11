@@ -29,12 +29,23 @@ func (node *Node) Traverse() {
 	fmt.Println()
 }
 
+func (node *Node) TraverseWithChannel() chan *Node {
+	channel := make(chan *Node)
+	go func() {
+		node.TraversalFunc(func(node *Node) {
+			channel <- node
+		})
+		close(channel)
+	}()
+	return channel
+}
+
 func main() {
 	var root Node
 
 	root = Node{Value: 3}
 	root.Left = &Node{}
-	root.Right = &Node{5, nil, nil}
+	root.Right = &Node{10, nil, nil}
 	root.Right.Left = new(Node)
 	root.Left.Right = &Node{2, nil, nil}
 
@@ -44,4 +55,13 @@ func main() {
 		nodeCount++
 	})
 	fmt.Println("tree node count is ", nodeCount)
+
+	c := root.TraverseWithChannel()
+	maxValue := 0
+	for n := range c {
+		if n.Value > maxValue {
+			maxValue = n.Value
+		}
+	}
+	fmt.Println("max node value is ", maxValue)
 }

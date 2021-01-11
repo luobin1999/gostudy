@@ -1,0 +1,49 @@
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+type worker struct {
+	in   chan int
+	done func()
+}
+
+func doWork(id int, worker worker) {
+	for n := range worker.in {
+		fmt.Printf("Worker %d received %c\n", id, n)
+		worker.done()
+	}
+}
+
+func createWorker(id int, wg *sync.WaitGroup) worker {
+	worker := worker{
+		in: make(chan int),
+		done: func() {
+			wg.Done()
+		},
+	}
+	go doWork(id, worker)
+	return worker
+}
+
+func chanDome() {
+	var wg sync.WaitGroup
+	var workers [10]worker
+	for i := 0; i < 10; i++ {
+		workers[i] = createWorker(i, &wg)
+	}
+	wg.Add(20)
+	for i, worker := range workers {
+		worker.in <- 'a' + i
+	}
+	for i, worker := range workers {
+		worker.in <- 'A' + i
+	}
+	wg.Wait()
+}
+
+func main() {
+	chanDome()
+}
