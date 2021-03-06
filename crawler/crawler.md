@@ -18,6 +18,9 @@ Request格式：{URL，对应解析器}
 ###### 2.2.1 [城市列表解析器](zhenai/parser/citylist.go)
 ###### 2.2.2 [城市列表解析器单元测试](zhenai/parser/citylist_test.go)
 ###### 2.2.3 [正则表达式学习代码](regex/main.go)
+###### 2.2.4 [城市解析器](zhenai/parser/city.go)
+###### 2.2.5 [用户解析器](zhenai/parser/profile.go)
+
 ##### 2.3 Seed
 种子页面
 ##### 2.4 [Fetcher](fetcher/fetcher.go)
